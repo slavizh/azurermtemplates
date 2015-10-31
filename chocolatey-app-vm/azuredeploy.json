@@ -6,7 +6,11 @@
             "type": "string",
             "defaultValue": "West US",
             "allowedValues": [
-                "West US"
+                "East US",
+                "West US",
+                "West Europe",
+                "Southeast Asia",
+                "East Asia"
             ]
         },
         "newStorageAccountName": {
@@ -21,8 +25,7 @@
             ],
         },
         "uniqueDNSNameBase":{
-          "type" : "string",
-          "defaultValue" : "chocvm"
+          "type" : "string"
         },
         "vmSize": {
             "type": "string",
@@ -47,7 +50,7 @@
         },
         "vmSourceImageName" :{
             "type" : "string",
-            "defaultValue" : "a699494373c04fc0bc8f2bb1389d6106__Windows-Server-2012-R2-201412.01-en.us-127GB.vhd"
+            "defaultValue" : "a699494373c04fc0bc8f2bb1389d6106__Windows-Server-2012-R2-201503.01-en.us-127GB.vhd"
         },
         "virtualNetworkName" :{
             "type" : "string",
@@ -58,9 +61,9 @@
         "sourceImageName": "[concat('/',subscription().subscriptionId,'/services/images/',parameters('vmSourceImageName'))]",
         "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',parameters('virtualNetworkName'))]",
         "scriptUrl" : "https://iaasscripts.blob.core.windows.net/scripts/InstallApplication.ps1",
-	      "scriptName" : "InstallApplication.ps1",
+	      "scriptName" : ".\\InstallApplication.ps1",
+        "customScriptExtensionVersion" : "1.4",
 	      "scriptArg" : "[parameters('applicationToInstall')]",
-        "customScriptExtensionVersion" : "1.2",
         "publicIPAddressName" : "[concat(parameters('uniqueDNSNameBase'),'pubIP')]",
         "publicIPAddressType" : "Dynamic",
         "vmStorageAccountContainerName" : "vhds",
@@ -189,7 +192,7 @@
                 "typeHandlerVersion": "[variables('customScriptExtensionVersion')]",
                 "settings": {
                     "fileUris": ["[variables('scriptUrl')]"],
-                    "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -file ',variables('scriptName'),' ',variables('scriptArg'))]"
+                    "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -command ',variables('scriptName'),' ',variables('scriptArg'))]"
                 }
             }
         }
